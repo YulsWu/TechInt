@@ -37,11 +37,11 @@ public final class BlackBear extends LandAnimal{
     protected void grow(){
         System.out.println("As " + name + " grows, it reaches an impressive size.");
     }
-
+    
     protected void respond(){
         System.out.println(name + " hears a rustling in the bushes, it lets a low rumbling growl in response, the iterloper flees");
     }
-
+    
     public Living live(){
         respire();
         move();

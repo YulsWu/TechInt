@@ -28,6 +28,7 @@ public final class GreatWhite extends SeaAnimal {
         Living newShark = new GreatWhite(name, weight);
         return newShark;
     }
+    
     protected void respond(){
         System.out.println(this.name + " smells the scent of blood on the water, and rushes towards its next meal.");
     }

@@ -15,9 +15,11 @@ public abstract class SeaAnimal extends Living {
         System.out.println("This animal is old and weary, it swims as deep as it can, and into the beyond");
     }
 
+    /* 
     public abstract Living live();
     abstract protected void move();
     abstract protected Living reproduce(String name, int weight);
     abstract protected void respond();
     abstract protected void grow();
+    */
 }
