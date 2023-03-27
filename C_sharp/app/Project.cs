@@ -9,7 +9,7 @@ namespace MainNamespace
         {
             Hello myHello = new Hello();
             myHello.HelloWorld();
-
+            
             BlackBear myBear = new BlackBear("FuzzyWuzzy", 482);
             myBear.live();
            
