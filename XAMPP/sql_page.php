@@ -1,3 +1,25 @@
+<!-- PHP part -->
+<?php
+
+$user = 'root';
+$password = '';
+$database = 'test';
+$servername = 'localhost:3306';
+$mysqli = new mysqli ($servername, $user, $password, $database);
+
+if ($mysqli->connect_error){
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+$adminQuery = "SELECT first_name, last_name, role FROM employees WHERE role='A'";
+$modQuery = "SELECT first_name, last_name, role FROM employees WHERE role='M'";
+
+$admins = $mysqli->query($adminQuery);
+$mods = $mysqli->query($modQuery);
+
+$mysqli->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,14 +32,39 @@
     <script src=""></script>
 </head>
 <body>
-    <p id="p1" class="pclass"> This is the default paragraph content </p>
-    <h2 id="list_header">Ordered list of things:</h2>
-    <ol id="ol1">
-        <li id="li1" class="list_item">The first thing in the list</li>
-        <li id="li2" class="list_item">The second thing in the list</li>
-        <li id="li3" class="list_item">The third thing in the list</li>
-    </ol>
-    <button type="button" id="button1">Change list</button>
-    <button type="button" id="resetButton">Reset list</button>
+    <table>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Role</th>
+        </tr>
+        <?php
+            while($rows=$admins->fetch_assoc()){
+        ?>
+        <tr>
+            <td><?php echo $rows['first_name'];?></td>
+            <td><?php echo $rows['last_name'];?></td>
+            <td><?php echo $rows['role'];?></td>
+        </tr>
+        <?php
+            }
+        ?>
+        <?php
+            while($rows=$mods->fetch_assoc()){
+        ?>
+        <tr>
+            <td><?php echo $rows['first_name'];?></td>
+            <td><?php echo $rows['last_name'];?></td>
+            <td><?php echo $rows['role'];?></td>
+        </tr>
+        <?php
+            }
+        ?>    
+    </table>
+<form action="Hello_page.html">
+    <input type="submit" value="Go to List" />
+</form>
+
+
 </body>
 </html>
