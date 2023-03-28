@@ -73,6 +73,8 @@ VALUES
 (9, 'U', "Clarice", "Marston"),
 (10,'U', "Mary-Beth", "Morgan")
 
+--Operations on DB
+
 -- Join employees with financial on employee_id
 SELECT *
 FROM employees as e
@@ -82,15 +84,17 @@ SELECT e.role, f.salary, f.tenure_months
 FROM employees as e
 INNER JOIN financial as f ON e.employee_id=f.employee_id
 -- First, last name and salary of highest earner
-SELECT e.first_name, e.last_name, MAX(f.salary)
+SELECT e.first_name, e.last_name, f.salary
 FROM employees as e
-INNER JOIN financial as f ON e.employee_id=f.employee_id
--- Find name of person making the most salary, no salary included
-SELECT first_name, last_name
-FROM
-    (SELECT e.first_name, e.last_name, MAX(f.tenure_months)
-    FROM employees as e
-    INNER JOIN financial as f ON e.employee_id=f.employee_id) temp
+INNER JOIN financial as f 
+ON e.employee_id=f.employee_id
+WHERE f.salary = (SELECT MAX(salary) from financial)
+-- Find name of person employed the shortest time
+SELECT e.first_name, e.last_name, f.tenure_months
+FROM employees as e
+INNER JOIN financial as f 
+ON e.employee_id=f.employee_id
+WHERE f.tenure_months = (SELECT MIN(tenure_months) FROM financial)
 -- Show highest salaries of each role
 SELECT role, MAX(salary)
 FROM employees as e
@@ -103,3 +107,31 @@ FROM
     FROM employees as e
     INNER JOIN financial as f ON e.employee_id=f.employee_id
     GROUP BY role) temp
+-- Show users with create access
+SELECT e.first_name, e.last_name, e.role
+FROM employees as e
+INNER JOIN roles as r 
+ON e.role=r.role
+WHERE r.create_access=1
+-- Show users with create access who don't have read access (no one)
+SELECT e.first_name, e.last_name, e.role
+FROM employees as e
+INNER JOIN roles as r 
+ON e.role=r.role
+WHERE r.create_access=1 AND r.read_access=0
+-- Show number of employees with each role
+SELECT role, COUNT(role)
+FROM employees
+GROUP BY role
+-- List names of people who hold the least common role
+SELECT first_name, last_name
+FROM employees
+WHERE role = 
+    (SELECT role
+    FROM (SELECT role, COUNT(role) as role_counts
+          FROM employees
+          GROUP BY role) temp 
+    WHERE role_counts = (SELECT MIN(role_counts) from (SELECT role, COUNT(role) as role_counts
+                                                       FROM employees
+                                                       GROUP BY role)
+                         temp2))
